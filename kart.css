@@ -1,0 +1,445 @@
+:root {
+    /* رنگ‌های جدید */
+    --surface-primary: #0a0f16;
+    --surface-secondary: #0d1218;
+    --accent-primary: #00ffbb;
+    --accent-secondary: #4d00ff;
+    --text-primary: #ffffff;
+    --text-secondary: #8b95a1;
+    
+    /* سایه‌های نیومورفیک */
+    --shadow-dark: #070b10;
+    --shadow-light: #0f151d;
+    --inner-shadow: inset 2px 2px 4px var(--shadow-dark),
+                    inset -2px -2px 4px var(--shadow-light);
+}
+
+@property --progress {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+}
+
+@keyframes progress {
+    from { --progress: 0 }
+    to { --progress: 0.86 }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: var(--surface-secondary);
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--text-primary);
+}
+
+.card {
+    width: 380px;
+    height: 520px;
+    padding: 3px;
+    border-radius: 30px;
+    background: linear-gradient(
+        45deg,
+        var(--accent-primary),
+        var(--accent-secondary)
+    );
+    position: relative;
+    animation: pulse 6s ease-in-out infinite;
+    isolation: isolate;
+}
+
+/* افکت‌های نور چرخشی */
+.card::before,
+.card::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 32px;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        var(--accent-primary) 180deg,
+        transparent 360deg
+    );
+    animation: rotate-light 4s linear infinite;
+    z-index: -1;
+}
+
+.card::after {
+    background: conic-gradient(
+        from 180deg,
+        transparent 0deg,
+        var(--accent-secondary) 180deg,
+        transparent 360deg
+    );
+    animation: rotate-light 4s linear infinite reverse;
+    filter: blur(24px);
+}
+
+@keyframes rotate-light {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.card-inner {
+    background: var(--surface-primary);
+    height: 100%;
+    border-radius: 28px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--inner-shadow);
+    /* اضافه کردن backdrop-filter برای افکت مات */
+    backdrop-filter: blur(10px);
+}
+
+.top-accent {
+    height: 160px;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 255, 208, 0.15),
+        rgba(112, 0, 255, 0.15)
+    );
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+}
+
+.content {
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.status-ring {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    margin: -80px auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring-circle {
+    stroke: var(--accent-primary);
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    stroke-dasharray: 326.7256359733385;
+    stroke-dashoffset: calc(326.7256359733385 * (1 - var(--progress)));
+    animation: progress 2s ease-out forwards;
+}
+
+.status-value {
+    position: absolute;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent-primary);
+    text-shadow: 0 0 20px rgba(0, 255, 208, 0.5);
+}
+
+.status-value small {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.info-section {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.title {
+    font-size: 1.8rem;
+    margin: 0 0 1rem;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.tags {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.tag {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background: var(--surface-secondary);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    box-shadow: var(--inner-shadow);
+}
+
+.metrics {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-radius: 20px;
+    background: var(--surface-secondary);
+    box-shadow: var(--inner-shadow);
+}
+
+.metric-item {
+    text-align: center;
+    flex: 1;
+}
+
+.divider {
+    width: 1px;
+    height: 40px;
+    background: var(--text-secondary);
+    opacity: 0.2;
+}
+
+.metric-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-primary);
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    position: relative;
+}
+
+.indicator.up::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 3px;
+    border: 4px solid transparent;
+    border-bottom-color: var(--accent-primary);
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.action-btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 15px;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    box-shadow: var(--inner-shadow);
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background: linear-gradient(
+        45deg,
+        var(--accent-primary),
+        var(--accent-secondary)
+    );
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.btn-icon svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.glow-effects {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: float 8s infinite;
+    mix-blend-mode: screen;
+}
+
+.glow-1 {
+    width: 250px;
+    height: 250px;
+    top: -100px;
+    right: -50px;
+    background: var(--accent-primary);
+    animation: float 8s infinite;
+}
+
+.glow-2 {
+    width: 350px;
+    height: 350px;
+    bottom: -150px;
+    left: -100px;
+    background: var(--accent-secondary);
+    animation: float 8s infinite reverse;
+    animation-delay: -4s;
+}
+
+/* رسپانسیو */
+@media (max-width: 480px) {
+    .card {
+        width: 90vw;
+        height: auto;
+        min-height: 520px;
+    }
+}
+
+/* دسترسی‌پذیری */
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .glow,
+    .progress-ring-circle {
+        animation: none;
+    }
+}
+
+.brand {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 4px;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(0, 255, 187, 0.3);
+}
+
+.tagline {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    margin: 0.5rem 0 2rem;
+    letter-spacing: 2px;
+}
+
+.brand-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 15px;
+    background: var(--surface-secondary);
+    box-shadow: var(--inner-shadow);
+    transition: transform 0.3s ease;
+}
+
+.contact-item:hover {
+    transform: translateX(10px);
+    background: linear-gradient(
+        45deg,
+        rgba(0, 255, 187, 0.1),
+        rgba(77, 0, 255, 0.1)
+    );
+}
+
+.contact-icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: var(--surface-primary);
+    box-shadow: var(--inner-shadow);
+}
+
+.contact-icon svg {
+    fill: var(--accent-primary);
+    filter: drop-shadow(0 0 5px rgba(0, 255, 187, 0.5));
+}
+
+.contact-label {
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.status-ring {
+    margin-top: 3rem;
+}
+
+.status-label {
+    position: absolute;
+    top: 70%;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.expertise-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.tag {
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    background: var(--surface-secondary);
+    color: var(--accent-primary);
+    font-size: 0.9rem;
+    box-shadow: var(--inner-shadow);
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(
+        45deg,
+        rgba(0, 255, 187, 0.1),
+        rgba(77, 0, 255, 0.1)
+    );
+} 
